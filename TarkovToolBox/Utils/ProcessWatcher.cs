@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using Microsoft.WindowsAPICodePack;
 
 namespace TarkovToolBox.Utils
 {
@@ -18,14 +11,6 @@ namespace TarkovToolBox.Utils
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        private static IntPtr LastHandle
-        {
-            get
-            {
-                return _previousToLastHandle;
-            }
-        }
 
         public static bool LastActiveWindowWasTarkov()
         {
@@ -44,9 +29,5 @@ namespace TarkovToolBox.Utils
             // NOTE: In some rare cases ProcessID will be NULL. Handle this how you want. 
             return fgProc;
         }
-
-        private static Timer _timer;
-        private static IntPtr _previousHandle = IntPtr.Zero;
-        private static IntPtr _previousToLastHandle = IntPtr.Zero;
     }
 }

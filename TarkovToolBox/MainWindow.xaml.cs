@@ -4,6 +4,9 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using TarkovToolBox.Extensions;
 using CefSharp;
+using CefSharp.Wpf;
+using System.Diagnostics;
+using System.IO;
 
 namespace TarkovToolBox
 {
@@ -22,8 +25,15 @@ namespace TarkovToolBox
         {
             InitializeComponent();
             PostInit();
-            CefSharpSettings.ShutdownOnExit = true;
-            CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
+
+            CefSettings CefSettings = new CefSettings();
+            CefSettings.CachePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\BrowserCache";
+
+            if (!Cef.IsInitialized)
+            {
+                //Perform dependency check to make sure all relevant resources are in our output directory.
+                Cef.Initialize(CefSettings, performDependencyCheck: true, browserProcessHandler: null);
+            }
         }
 
         private void PostInit()
@@ -77,7 +87,6 @@ namespace TarkovToolBox
             (menuItemTemplate as ToolStripMenuItem).DropDown.ForeColor = System.Drawing.Color.WhiteSmoke;
             //(menuItemTemplate as ToolStripMenuItem).DropDown.
             mList.Add(menuItemTemplate);
-
 
             return mList.ToArray();
         }
