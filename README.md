@@ -1,14 +1,6 @@
 
 ![](https://github.com/LemonDrop1228/EFT-Overlay/blob/main/ExampleMedia/TT_Title.png)
 
-## Installation
-
-  - Download th latest release, and extract somewhere on your computer. Right-click 
-  - 'TarkovToolbox.exe' and click 'Create shortcut'
-  - After the shortcut is created, right-click it and click properties
-  - Add the string below to the end of the 'Target' field:
-    - " /WelcomeToTarkov"   (make sure there's a space between **TarkovToolbox.exe** and **/WelcomeToTarkov**)
-
 ## Usage
 
   - You can toggle the overlay using the '**M**' key on your keyboard.
