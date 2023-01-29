@@ -1,19 +1,7 @@
-﻿using CefSharp.Wpf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CefSharp;
+using CefSharp.Wpf;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TarkovToolBox.Views
 {
@@ -31,13 +19,19 @@ namespace TarkovToolBox.Views
 
         private void InitMarketBrowser(string url)
         {
-            MarketBrowser = new ChromiumWebBrowser(url);
+            BrowserSettings settings = new BrowserSettings
+            {
+                WindowlessFrameRate = 60,
+                WebGl = CefState.Enabled
+            };
+            ChromiumWebBrowser MarketBrowser = new ChromiumWebBrowser(url)
+            {
+                BrowserSettings = settings
+            };
             Window visual = Application.Current.Windows[Application.Current.Windows.Count - 1];
             HwndSource parentWindowHwndSource = (HwndSource)HwndSource.FromVisual(visual);
             MarketBrowser.CreateBrowser(parentWindowHwndSource, new Size(100, 100));
             MarketBrowser.Name = $"browser_Market";
-
-
             BrowserContainerBorder.Child = MarketBrowser;
         }
 

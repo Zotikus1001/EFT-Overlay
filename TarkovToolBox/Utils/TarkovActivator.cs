@@ -14,12 +14,24 @@ namespace TarkovToolBox.Utils
         [DllImport("user32.dll")]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        private const int SW_SHOWNORMAL = 1;
+
 
         public static void ActivateTarkov()
         {
-            var prc = Process.GetProcessesByName("EscapeFromTarkov");
-            if (prc.Length > 0)
-                SetForegroundWindow(prc[0].MainWindowHandle);
+            Process[] processes = Process.GetProcessesByName("EscapeFromTarkov");
+            if (processes.Length > 0)
+            {
+                var hWnd = processes.First().MainWindowHandle;
+                if (hWnd != IntPtr.Zero)
+                {
+                    ShowWindow(hWnd, SW_SHOWNORMAL);
+                    SetForegroundWindow(hWnd);
+                }
+            }
         }
     }
 }

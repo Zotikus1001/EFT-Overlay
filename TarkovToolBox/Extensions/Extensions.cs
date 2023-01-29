@@ -1,8 +1,12 @@
 ﻿using CefSharp;
+using CefSharp.DevTools.Network;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Controls;
+using TarkovToolBox.Extensions;
 
 namespace TarkovToolBox.Extensions
 {
@@ -32,21 +36,6 @@ namespace TarkovToolBox.Extensions
 
     public class MyCustomResourceRequestHandler : CefSharp.Handler.ResourceRequestHandler
     {
-        /// <summary>
-        /// Called on the CEF IO thread before a resource request is loaded. To redirect or change the resource load optionally modify
-        /// <paramref name="request"/>. Modification of the request URL will be treated as a redirect.
-        /// </summary>
-        /// <param name="chromiumWebBrowser">The ChromiumWebBrowser control.</param>
-        /// <param name="browser">the browser object - may be null if originating from ServiceWorker or CefURLRequest.</param>
-        /// <param name="frame">the frame object - may be null if originating from ServiceWorker or CefURLRequest.</param>
-        /// <param name="request">the request object - can be modified in this callback.</param>
-        /// <param name="callback">Callback interface used for asynchronous continuation of url requests.</param>
-        /// <returns>
-        /// Return <see cref="CefReturnValue.Continue"/> to continue the request immediately. Return
-        /// <see cref="CefReturnValue.ContinueAsync"/> and call <see cref="IRequestCallback.Continue"/> or
-        /// <see cref="IRequestCallback.Cancel"/> at a later time to continue or the cancel the request asynchronously. Return
-        /// <see cref="CefReturnValue.Cancel"/> to cancel the request immediately.
-        /// </returns>
         protected override CefReturnValue OnBeforeResourceLoad(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IRequestCallback callback)
         {
             return CefReturnValue.Cancel;
@@ -59,15 +48,43 @@ namespace TarkovToolBox.Extensions
         {
             Debug.WriteLine("In GetResourceRequestHandler : " + request.Url);
             //Only intercept specific Url's
-            if (request.Url.Contains("googleadservices.com") 
+            if (request.Url.Contains("googleadservices")
                 || request.Url.Contains("doubleclick.net")
-                || request.Url.Contains("nitropay.com")
-                || request.Url.Contains("google-analytics.com"))
+                || request.Url.Contains("nitropay")
+                || request.Url.Contains("google-analytics")
+                || request.Url.Contains("ad.turn.com")
+                || request.Url.Contains("ad-delivery.net")
+                || request.Url.Contains("amazon-adsystem"))
             {
                 return new MyCustomResourceRequestHandler();
             }
             //Default behaviour, url will be loaded normally.
             return null;
+        }
+    }
+
+    public static class WindowFocuser
+    {
+        [DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        private const int SW_SHOWNORMAL = 1;
+
+        public static void FocusWindow(string windowName)
+        {
+            Process[] processes = Process.GetProcessesByName(windowName);
+            if (processes.Length > 0)
+            {
+                var hWnd = processes.First().MainWindowHandle;
+                if (hWnd != IntPtr.Zero)
+                {
+                    ShowWindow(hWnd, SW_SHOWNORMAL);
+                    SetForegroundWindow(hWnd);
+                }
+            }
         }
     }
 }

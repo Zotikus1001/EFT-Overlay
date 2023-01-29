@@ -1,37 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.WindowsAPICodePack;
 
 namespace TarkovToolBox.Utils
 {
     static class ProcessWatcher
     {
-        public static void StartWatcher()
-        {
-            _timer = new Timer(100);
-            _timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-            _timer.Start();
-        }
-        public static void StopWatcher()
-        {
-            _timer.Dispose();
-        }
-
-        static void timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            setLastActive();
-        }
-
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
 
-
-        [DllImport("user32.dll")]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         private static IntPtr LastHandle
         {
@@ -41,29 +27,22 @@ namespace TarkovToolBox.Utils
             }
         }
 
-        private static void setLastActive()
-        {
-            IntPtr currentHandle = GetForegroundWindow();
-            if (currentHandle != _previousHandle)
-            {
-                _previousToLastHandle = _previousHandle;
-                _previousHandle = currentHandle;
-            }
-        }
-
         public static bool LastActiveWindowWasTarkov()
         {
-            return TestWindowText();
+            if (getForegroundProcess().ProcessName.Contains("Tarkov"))
+                return true;
+            else
+                return false;
+        }
 
-            bool TestWindowText()
-            {
-                const int nChars = 256;
-                StringBuilder Buff = new StringBuilder(nChars);
-                if (GetWindowText(_previousToLastHandle, Buff, nChars) > 0)
-                    return Buff.ToString() == "EscapeFromTarkov";
-                else
-                    return false;
-            }
+        public static Process getForegroundProcess()
+        {
+            uint processID = 0;
+            IntPtr hWnd = GetForegroundWindow(); // Get foreground window handle
+            uint threadID = GetWindowThreadProcessId(hWnd, out processID); // Get PID from window handle
+            Process fgProc = Process.GetProcessById(Convert.ToInt32(processID)); // Get it as a C# obj.
+            // NOTE: In some rare cases ProcessID will be NULL. Handle this how you want. 
+            return fgProc;
         }
 
         private static Timer _timer;

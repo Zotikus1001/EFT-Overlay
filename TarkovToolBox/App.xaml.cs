@@ -2,6 +2,7 @@
 using System.Windows;
 using TarkovToolBox.Utils;
 using System.Timers;
+using System.Diagnostics;
 
 namespace TarkovToolBox
 {
@@ -14,6 +15,7 @@ namespace TarkovToolBox
         public LowLevelKeyboardListener keyboardListener { get; set; }
 
         public Timer orphanedTimer { get; set; }
+        Timer key_cooldown_timer = new Timer(100);
 
         void App_Startup(object sender, StartupEventArgs e)
         {
@@ -22,8 +24,6 @@ namespace TarkovToolBox
             keyboardListener.OnKeyPressed += KeyboardListener_OnKeyPressed;
 
             ToolBoxOverlay = (MainWindow)this.MainWindow;
-
-            ProcessWatcher.StartWatcher();
 
             orphanedTimer = new Timer();
             orphanedTimer.Elapsed += OrphanedTimer_Elapsed;
@@ -34,39 +34,41 @@ namespace TarkovToolBox
 
         private void ToolBoxOverlay_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Console.WriteLine("WINDOW DED APP");
+            Debug.WriteLine("WINDOW DED APP");
         }
 
         private void OrphanedTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            ToolBoxOverlay.Dispatcher.Invoke((Action) (() =>
+            ToolBoxOverlay.Dispatcher.Invoke((Action)(() =>
             {
                 if (ToolBoxOverlay.WindowState == WindowState.Maximized)
                 {
                     if (!TarkovIsFocused() && !ProcessWatcher.LastActiveWindowWasTarkov())
-                        ToolBoxOverlay.WindowState = WindowState.Normal; 
+                        ToolBoxOverlay.WindowState = WindowState.Normal;
                 }
             }));
         }
 
         private void KeyboardListener_OnKeyPressed(object sender, KeyPressedArgs e)
         {
-            ToggleOverlay(e, TarkovIsFocused());
+            if (e.KeyPressed == System.Windows.Input.Key.M)
+            {
+                if (!key_cooldown_timer.Enabled)
+                {
+                    key_cooldown_timer.AutoReset = false;
+                    key_cooldown_timer.Start();
+                    ToggleOverlay(e, TarkovIsFocused());
+                }
+            }
         }
 
         private void ToggleOverlay(KeyPressedArgs e, bool tIsFocused)
         {
-            if (e.KeyPressed == System.Windows.Input.Key.M
-                && ToolBoxOverlay.WindowState == WindowState.Normal
-                && tIsFocused)
+            if (ToolBoxOverlay.WindowState == WindowState.Normal && tIsFocused)
                 PerformToggle(WindowState.Maximized);
-            else if (e.KeyPressed == System.Windows.Input.Key.M
-                && ToolBoxOverlay.WindowState == WindowState.Maximized
-                && tIsFocused)
+            else if (ToolBoxOverlay.WindowState == WindowState.Maximized && tIsFocused)
                 PerformToggle(WindowState.Normal);
-            else if(e.KeyPressed == System.Windows.Input.Key.M
-                && ToolBoxOverlay.WindowState == WindowState.Maximized
-                && !tIsFocused && ProcessWatcher.LastActiveWindowWasTarkov())
+            else if(ToolBoxOverlay.WindowState == WindowState.Maximized && !tIsFocused && ProcessWatcher.LastActiveWindowWasTarkov())
                 PerformToggle(WindowState.Normal);
 
             void PerformToggle(WindowState windowState)
@@ -105,11 +107,10 @@ namespace TarkovToolBox
 
         private void CleanUp()
         {
-            Console.WriteLine("Cleaing Keyboard Listener...");
+            Debug.WriteLine("Cleaing Keyboard Listener...");
             keyboardListener.UnHookKeyboard();
-            Console.WriteLine("Cleaing Process watcher...");
-            ProcessWatcher.StopWatcher();
-            Console.WriteLine("Cleaing Orphan Timer...");
+            Debug.WriteLine("Cleaing Process watcher...");
+            Debug.WriteLine("Cleaing Orphan Timer...");
             orphanedTimer.Stop();
             orphanedTimer.Dispose();
         }

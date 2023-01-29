@@ -11,7 +11,7 @@
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
         Icon="pack://application:,,,/TarkovToolBox;component/Resources/Toolsimage.ico"
-        Title="Tarkov ToolBox" Height="450" Width="800" WindowStartupLocation="Manual" 
+        Title="Tarkov ToolBox" Height="{x:Static SystemParameters.PrimaryScreenHeight}" Width="{x:Static SystemParameters.PrimaryScreenWidth}" WindowStartupLocation="Manual" 
         ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True" AllowsTransparency="True" 
         WindowStyle="None" Background="#FF3C4555" Closing="Window_Closing" 
         Left="-9999" Top="-9999" Loaded="Window_Loaded">
