@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using TarkovToolBox.Utils;
 using System.Timers;
@@ -23,27 +17,19 @@ namespace TarkovToolBox
 
         void App_Startup(object sender, StartupEventArgs e)
         {
+            keyboardListener = new LowLevelKeyboardListener();
+            keyboardListener.HookKeyboard();
+            keyboardListener.OnKeyPressed += KeyboardListener_OnKeyPressed;
 
-            if (!e.Args.Contains("/WelcomeToTarkov"))
-                Shutdown();
-            else
-            {
-                keyboardListener = new LowLevelKeyboardListener();
-                keyboardListener.HookKeyboard();
-                keyboardListener.OnKeyPressed += KeyboardListener_OnKeyPressed;
+            ToolBoxOverlay = (MainWindow)this.MainWindow;
 
-                ToolBoxOverlay = (MainWindow)this.MainWindow;
+            ProcessWatcher.StartWatcher();
 
-                ProcessWatcher.StartWatcher();
-
-                orphanedTimer = new Timer();
-                orphanedTimer.Elapsed += OrphanedTimer_Elapsed;
-                orphanedTimer.Enabled = true;
-                orphanedTimer.Interval = 250;
-                orphanedTimer.Start();
-
-
-            }
+            orphanedTimer = new Timer();
+            orphanedTimer.Elapsed += OrphanedTimer_Elapsed;
+            orphanedTimer.Enabled = true;
+            orphanedTimer.Interval = 250;
+            orphanedTimer.Start();
         }
 
         private void ToolBoxOverlay_Closing(object sender, System.ComponentModel.CancelEventArgs e)
