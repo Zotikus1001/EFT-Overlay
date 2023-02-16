@@ -143,6 +143,11 @@ namespace TarkovToolBox
         {
             MainTabCtrl.SelectedIndex = 4;
         }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            MainTabCtrl.SelectedIndex = 5;
+        }
     }
 
     enum MapEnums

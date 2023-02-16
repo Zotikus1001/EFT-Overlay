@@ -39,10 +39,13 @@
                         </Style>
                     </TabControl.ItemContainerStyle>
                     <TabItem x:Name="HomeTab">
-                        <Views:HomeView />
+                        <Views:HomeView/>
+                    </TabItem>
+                    <TabItem x:Name="TarkovTrackerTab">
+                        <Views:TarkovTrackerView/>
                     </TabItem>
                     <TabItem x:Name="MapTab">
-                        <Views:MapView />
+                        <Views:MapView/>
                     </TabItem>
                     <TabItem x:Name="MarketTab">
                         <Views:MarketView/>
@@ -69,28 +72,34 @@
                     <StackPanel Orientation="Vertical">
 
                         <Button MinHeight="50" Margin="0 0 0 5" Click="Button_Click_1">
+                            <StackPanel Orientation="Horizontal" >
+                                <Image Source="Resources/FolderWithIntelligence_cleaned.png" Stretch="UniformToFill" Width="32" Height="32" Margin="0 0 5 0"/>
+                                <TextBlock Text="TarkovTracker" FontSize="22" FontFamily="Consolas" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button MinHeight="50" Margin="0 0 0 5" Click="Button_Click_2">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/MapItem_cleaned.png" Stretch="UniformToFill" Width="32" Height="32" Margin="0 0 5 0"/>
                                 <TextBlock Text="Raid Maps" FontSize="22" FontFamily="Consolas" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-                        <Button MinHeight="50" Margin="0 0 0 5" Click="Button_Click_2">
+                        <Button MinHeight="50" Margin="0 0 0 5" Click="Button_Click_3">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/Roubles_cleaned.png" Stretch="UniformToFill" Width="32" Height="32" Margin="0 0 5 0"/>
                                 <TextBlock Text="Flea Market" FontSize="22" FontFamily="Consolas" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-                        <Button MinHeight="50" Margin="0 0 0 5" Click="Button_Click_3">
+                        <Button MinHeight="50" Margin="0 0 0 5" Click="Button_Click_4">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Resources/PeltorComTac2Headset_cleaned.png" Stretch="UniformToFill" Width="32" Height="32" Margin="0 0 5 0"/>
                                 <TextBlock Text="Live Comms" FontSize="22" FontFamily="Consolas" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-
-                        <Button MinHeight="50" Margin="0 0 0 5" Click="Button_Click_4">
+                        <Button MinHeight="50" Margin="0 0 0 5" Click="Button_Click_5">
                             <StackPanel Orientation="Horizontal" >
                                 <Image Source="Resources/FolderWithIntelligence_cleaned.png" Stretch="UniformToFill" Width="32" Height="32" Margin="0 0 5 0"/>
                                 <TextBlock Text="WiKi Docs" FontSize="22" FontFamily="Consolas" VerticalAlignment="Center"/>

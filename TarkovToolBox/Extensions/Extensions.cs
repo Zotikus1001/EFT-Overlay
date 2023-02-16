@@ -1,12 +1,10 @@
 ﻿using CefSharp;
-using CefSharp.DevTools.Network;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Controls;
-using TarkovToolBox.Extensions;
 
 namespace TarkovToolBox.Extensions
 {

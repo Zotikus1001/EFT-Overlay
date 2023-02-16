@@ -7,11 +7,11 @@ using TarkovToolBox.Extensions;
 namespace TarkovToolBox.Views
 {
     /// <summary>
-    /// Interaction logic for MapView.xaml
+    /// Interaction logic for TarkovTrackerView.xaml
     /// </summary>
-    public partial class MapView : BaseView
+    public partial class TarkovTrackerView : BaseView
     {
-        public MapView()
+        public TarkovTrackerView()
         {
             InitializeComponent();
         }
@@ -40,7 +40,7 @@ namespace TarkovToolBox.Views
         private void BaseView_Loaded(object sender, RoutedEventArgs e)
         {
             if (MarketBrowser == null)
-                InitMarketBrowser("https://www.gamemaps.co.uk/game/tarkov"); //https://eftmkg.com/
+                InitMarketBrowser("https://tarkovtracker.io/");
         }
     }
 }

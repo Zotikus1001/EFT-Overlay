@@ -151,6 +151,9 @@
     <Compile Include="Views\CommsView.xaml.cs">
       <DependentUpon>CommsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TarkovTrackerView.xaml.cs">
+      <DependentUpon>TarkovTrackerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -187,6 +190,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\CommsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TarkovTrackerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
